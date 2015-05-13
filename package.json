@@ -1,0 +1,22 @@
+{
+  "name": "CatchPhrase.ly",
+  "version": "1.0.0",
+  "description": "CatchPhrase.ly",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cachrisman/Catchphrase.ly.git"
+  },
+  "author": "Charlie Chrisman",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cachrisman/Catchphrase.ly/issues"
+  },
+  "homepage": "https://github.com/cachrisman/Catchphrase.ly",
+  "dependencies": {
+    "express": "^4.12.3"
+  }
+}
