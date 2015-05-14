@@ -9,8 +9,8 @@ var express = require("express"),
 // CONFIG //
 
 // serve js & css files into a public folder
-// app.use(express.static(__dirname + '/public'));
-app.use(express.static('public'));
+app.set('port', (process.env.PORT || 5000));
+app.use(express.static(__dirname + '/public'));
 
 // body parser config
 app.use(bodyParser.urlencoded({
@@ -84,6 +84,6 @@ app.delete("/phrases/:id", function(req, res) {
 });
 
 // listen on port 3000
-app.listen(80, function() {
-    console.log("listening on port 80!!!");
+app.listen(app.get('port'), function() {
+  console.log('Node app is running on port', app.get('port'));
 });
