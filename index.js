@@ -84,6 +84,6 @@ app.delete("/phrases/:id", function(req, res) {
 });
 
 // listen on port 3000
-app.listen(3000, function() {
-    console.log("listening on port 3000!!!");
+app.listen(80, function() {
+    console.log("listening on port 80!!!");
 });
