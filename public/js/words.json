@@ -1,10 +1,5 @@
 [
     {
-        "id": 0,
-        "word": "$PATH UNIX PATH",
-        "definition": "abcd"
-    },
-    {
         "id": 1,
         "word": ".apply (JavaScript)",
         "definition": "abcd"
@@ -15,9 +10,9 @@
         "definition": "abcd"
     },
     {
-        "id": 3,
         "word": ".hasOwnProperty (JavaScript)",
-        "definition": "abcd"
+        "definition": "abcdef",
+        "id": 3
     },
     {
         "id": 4,
@@ -380,10 +375,5 @@
         "id": 76,
         "word": "W3C",
         "definition": "abcd"
-    },
-    {
-        "word": "test3",
-        "definition": "test3",
-        "id": 77
     }
 ]

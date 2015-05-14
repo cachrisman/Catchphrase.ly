@@ -9,7 +9,8 @@ var express = require("express"),
 // CONFIG //
 
 // serve js & css files into a public folder
-app.use(express.static(__dirname + '/public'));
+// app.use(express.static(__dirname + '/public'));
+app.use(express.static('public'));
 
 // body parser config
 app.use(bodyParser.urlencoded({
@@ -22,8 +23,8 @@ app.use(bodyParser.urlencoded({
 var phrases = JSON.parse(
     fs.readFileSync(
         path.join(__dirname + '/public/js/words.json'),
-         'utf8')
-    );
+        'utf8')
+);
 
 // ROUTES //
 
@@ -31,7 +32,6 @@ var phrases = JSON.parse(
 app.get("/", function(req, res) {
     // render index.html
     res.sendFile(path.join(__dirname + '/public/views/index.html'));
-    // res.sendFile('/views/index.html');
 });
 
 // phrases index path
@@ -48,25 +48,38 @@ app.post("/phrases", function(req, res) {
     newPhrase.id = phrases[phrases.length - 1].id + 1;
     phrases.push(newPhrase);
     // console.log(JSON.stringify(phrases, null, 4));
-    fs.writeFile(path.join(__dirname + '/public/js/words.json'), JSON.stringify(phrases,null,4));
+    fs.writeFile(path.join(__dirname + '/public/js/words.json'), JSON.stringify(phrases, null, 4));
     res.send(newPhrase);
+});
+
+app.post("/phrases/:id", function(req, res) {
+    var updatedPhrase = req.body;
+    updatedPhrase.id = parseInt(req.params.id);
+    var idx = phrases.map(function(e) {
+        return e.id;
+    }).indexOf(parseInt(req.params.id));
+    // console.log(updatedPhrase);
+    // console.log(phrases[idx]);
+    phrases[idx] = updatedPhrase;
+    fs.writeFile(path.join(__dirname + '/public/js/words.json'), JSON.stringify(phrases, null, 4));
+    res.send(updatedPhrase);
 });
 
 app.delete("/phrases/:id", function(req, res) {
     // phrases#delete
     // console.log(phrases[req.params.id]);
     // console.log(req.params.id);
-    pos = phrases.map(function(e) {
-      // console.log(e.id);
+    var idx = phrases.map(function(e) {
+        // console.log(e.id);
         return e.id;
     }).indexOf(parseInt(req.params.id));
     // console.log(id_arr);
     // console.log(typeof req.params.id);
-    // pos = id_arr.indexOf(parseInt(req.params.id));
-    // console.log(pos);
-    // phrases.splice(pos, 1);
-    var deleted_word = phrases.splice(pos, 1);
-    fs.writeFile(path.join(__dirname + '/public/js/words.json'), JSON.stringify(phrases,null,4));
+    // idx = id_arr.indexOf(parseInt(req.params.id));
+    // console.log(idx);
+    // phrases.splice(idx, 1);
+    var deleted_word = phrases.splice(idx, 1);
+    fs.writeFile(path.join(__dirname + '/public/js/words.json'), JSON.stringify(phrases, null, 4));
     res.send(deleted_word);
 });
 

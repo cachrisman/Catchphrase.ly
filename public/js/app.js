@@ -6,10 +6,12 @@ $(function() {
     View.init();
 });
 
+var phrases;
 // // // // // // //
 
 // VIEW OBJECT
 function View() {}
+
 View.render = function(items, parentId, templateId) {
     // render a template
     var template = _.template($("#" + templateId).html());
@@ -29,11 +31,31 @@ View.init = function() {
                 $('#phrases-form')[0].reset();
             });
     });
-    // $('.close').on("click")
+    $('#close').on("click", function() {
+        $('.overlay').hide();
+    });
+    $('#update').on("submit", function(event) {
+        event.preventDefault();
+        // console.log($(this).serialize());
+        url = "/phrases/" + $('#id').data().id;
+        // console.log(url);
+        $.post(url, $(this).serialize())
+            .done(function(res) {
+                Phrases.all();
+                $('#update')[0].reset();
+            });
+        $('.overlay').hide();
+    });
+    $(document).on("keyup", function(e) {if (e.keyCode == 27) { $('.overlay').hide();}});
+    // $('#update').on("click", Phrases.show_edit);
+    // $('.list-group-item').on("click", Phrases.edit);
 };
 
 View.reset = function() {
-  $('#phrases-form').off();
+    $('#phrases-form').off();
+    $('#close').off();
+    $('#update').off();
+    $(document).off("keyup");
 };
 // Phrases OBJECT
 function Phrases() {}
@@ -41,14 +63,25 @@ function Phrases() {}
 Phrases.all = function() {
     $.get("/phrases", function(res) {
         // parse the response
-        var phrases = JSON.parse(res);
+        phrases = JSON.parse(res);
         // render the results
         View.render(phrases, "phrases-ul", "phrases-template");
-    }).done(function(res){
-      View.reset();
-      View.init();
+    }).done(function(res) {
+        View.reset();
+        View.init();
     });
 };
+
+Phrases.show_edit = function(item) {
+    id = $(item).data().id;
+    var idx = phrases.map(function(e) {
+        return e.id;
+    }).indexOf(parseInt(id));
+    $('#word').val(phrases[idx].word);
+    $('#definition').val(phrases[idx].definition);
+    $('#id').data().id = id;
+    $('.overlay').show();
+}
 
 Phrases.delete = function(item) {
     // console.log(item);
