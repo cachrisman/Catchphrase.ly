@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Catchphrase.ly</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- jQuery -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
+    <!-- Underscore -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
+    <!-- Bootstrap -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <!-- ToEat.ly -->
+    <link rel="stylesheet" type="text/css" href="../css/main.css">
+    <script src="../js/app.js"></script>
+</head>
+
+<body>
+    <div id="page-wrapper" class="well">
+        <!-- header -->
+        <header class="page-header">
+            <h1>CatchPhrase.ly</h1>
+        </header>
+        <form id="phrases-form" class="form-inline">
+            <input name="word" type="text" class="form-control" id="new-word" placeholder="Word" style="width: 14%">
+            <input name="definition" type="text" class="form-control" id="new-definition" placeholder="Definition" style="width: 75%">
+            <button type="submit" class="btn btn-default" style="width: 10%">Add Word</button>
+        </form>
+        <br>
+        <!-- all phrases! -->
+        <ul class="list-group" id="phrases-ul">
+        </ul>
+    </div>
+</body>
+<!-- Underscore template -->
+<script type="text/template" id="phrases-template">
+    <% _.each(collection, function(item){ %>
+        <li class='list-group-item'>
+            <%= item.word %> : <%= item.definition %><button data-id=<%= item.id %> onclick="Phrases.delete(this)" type="button" class="close" aria-label="Close"><span aria-hidden="true">×</span></button>
+        </li>
+        <% }); %>
+</script>
+
+</html>
