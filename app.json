@@ -1,0 +1,7 @@
+{
+  "name": "CatchPhrase.ly",
+  "description": "CatchPhrase.ly",
+  "repository": "https://github.com/cachrisman/Catchphrase.ly",
+  "logo": "http://node-js-sample.herokuapp.com/node.svg",
+  "keywords": ["node", "express", "static"]
+}
