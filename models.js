@@ -1,5 +1,7 @@
 var mongoose = require("mongoose");
-mongoose.connect("mongodb://localhost/catchphrasely_app");
+var uristring = process.env.PROD_MONGODB || 'mongodb://localhost/catchphrasely_app';
+console.log(uristring);
+mongoose.connect(uristring);
 
 var phraseSchema = new mongoose.Schema({
   word: {
