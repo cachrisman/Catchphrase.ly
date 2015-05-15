@@ -1,13 +1,13 @@
 [
     {
-        "id": 0,
         "word": "$PATH UNIX PATH",
-        "definition": "abcd"
+        "definition": "The PATH environment variable is a colon-delimited list of directories that your shell searches through when you enter a command",
+        "id": 0
     },
     {
-        "id": 1,
         "word": ".apply (JavaScript)",
-        "definition": "abcd"
+        "definition": "The apply() method calls a function with a given this value and arguments provided as an array (or an array-like object).\r\n\r\nNote: While the syntax of this function is almost identical to that of call(), the fundamental difference is that call() accepts an argument list, while apply() accepts a single array of arguments.",
+        "id": 1
     },
     {
         "id": 2,
@@ -380,10 +380,5 @@
         "id": 76,
         "word": "W3C",
         "definition": "abcd"
-    },
-    {
-        "word": "test3",
-        "definition": "test3",
-        "id": 77
     }
 ]
