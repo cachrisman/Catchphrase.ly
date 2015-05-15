@@ -22,31 +22,16 @@ View.render = function(items, parentId, templateId) {
 };
 
 View.init = function() {
-    $('#phrases-form').on("submit", function(event) {
-        event.preventDefault();
-        // console.log($(this).serialize());
-        $.post("/phrases", $(this).serialize())
-            .done(function(res) {
-                Phrases.all();
-                $('#phrases-form')[0].reset();
-            });
-    });
+    $('#phrases-form').on("submit", Phrases.add);
     $('#close').on("click", function() {
         $('.overlay').hide();
     });
-    $('#update').on("submit", function(event) {
-        event.preventDefault();
-        // console.log($(this).serialize());
-        url = "/phrases/" + $('#id').data().id;
-        // console.log(url);
-        $.post(url, $(this).serialize())
-            .done(function(res) {
-                Phrases.all();
-                $('#update')[0].reset();
-            });
-        $('.overlay').hide();
+    $('#update').on("submit", Phrases.update);
+    $(document).on("keyup", function(e) {
+        if (e.keyCode == 27) {
+            $('.overlay').hide();
+        }
     });
-    $(document).on("keyup", function(e) {if (e.keyCode == 27) { $('.overlay').hide();}});
     // $('#update').on("click", Phrases.show_edit);
     // $('.list-group-item').on("click", Phrases.edit);
 };
@@ -72,16 +57,39 @@ Phrases.all = function() {
     });
 };
 
+Phrases.add = function(event) {
+    event.preventDefault();
+    // console.log($(this).serialize());
+    $.post("/phrases", $(this).serialize())
+        .done(function(res) {
+            Phrases.all();
+            $('#phrases-form')[0].reset();
+        });
+};
+
 Phrases.show_edit = function(item) {
     id = $(item).data().id;
     var idx = phrases.map(function(e) {
-        return e.id;
-    }).indexOf(parseInt(id));
+        return e._id;
+    }).indexOf(id);
     $('#word').val(phrases[idx].word);
     $('#definition').val(phrases[idx].definition);
     $('#id').data().id = id;
     $('.overlay').show();
-}
+};
+
+Phrases.update = function(event) {
+    event.preventDefault();
+    // console.log($(this).serialize());
+    url = "/phrases/" + $('#id').data().id;
+    // console.log(url);
+    $.post(url, $(this).serialize())
+        .done(function(res) {
+            Phrases.all();
+            $('#update')[0].reset();
+        });
+    $('.overlay').hide();
+};
 
 Phrases.delete = function(item) {
     // console.log(item);
@@ -92,7 +100,7 @@ Phrases.delete = function(item) {
         url: url,
         type: 'DELETE',
         success: function(response) {
-            console.log(response);
+            // console.log(response);
             Phrases.all();
         }
     });

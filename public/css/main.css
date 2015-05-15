@@ -23,4 +23,5 @@
 .list-group-item-div {
     width : 95%;
     display: inline-block;
+    overflow: hidden;
 }
