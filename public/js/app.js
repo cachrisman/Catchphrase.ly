@@ -22,45 +22,56 @@ View.render = function(items, parentId, templateId) {
 };
 
 View.init = function() {
+    //event listener for add phrase form
     $('#phrases-form').on("submit", Phrases.add);
+    //event listener for update phrase popup form
+    $('#update').on("submit", Phrases.update);
+
+    //event listener for close button on update phrase popup form
     $('#close').on("click", function() {
         $('.overlay').hide();
     });
-    $('#update').on("submit", Phrases.update);
+    //event listener for ESC key to close update phrase popup form
     $(document).on("keyup", function(e) {
         if (e.keyCode == 27) {
             $('.overlay').hide();
         }
     });
-    // $('#update').on("click", Phrases.show_edit);
-    // $('.list-group-item').on("click", Phrases.edit);
 };
 
 View.reset = function() {
+    //turns off event listener for add phrase form
     $('#phrases-form').off();
-    $('#close').off();
+    //turns off event listener for update phrase popup form
     $('#update').off();
+    //turns off event listener for close button on update phrase form
+    $('#close').off();
+    //turns off event listener for ESC key on update phrase form
     $(document).off("keyup");
 };
 // Phrases OBJECT
 function Phrases() {}
 
 Phrases.all = function() {
+    //AJAX GET request
     $.get("/phrases", function(res) {
         // parse the response
         phrases = JSON.parse(res);
         // render the results
         View.render(phrases, "phrases-ul", "phrases-template");
     }).done(function(res) {
+        //when GET request completes, reset View and re-init View
         View.reset();
         View.init();
     });
 };
 
 Phrases.add = function(event) {
+    //prevent page reload on add phrase form submission
     event.preventDefault();
-    // console.log($(this).serialize());
+    //AJAX POST of new phrase from add phrase form
     $.post("/phrases", $(this).serialize())
+        // when POST request is completed, update Phrases and clear add phrase form
         .done(function(res) {
             Phrases.all();
             $('#phrases-form')[0].reset();
@@ -68,39 +79,45 @@ Phrases.add = function(event) {
 };
 
 Phrases.show_edit = function(item) {
+    //get id of phrase that was clicked
     id = $(item).data().id;
+    //find index of item in phrases array
     var idx = phrases.map(function(e) {
         return e._id;
     }).indexOf(id);
+    //fill in update phrase popup form input fields with data from phrases
     $('#word').val(phrases[idx].word);
     $('#definition').val(phrases[idx].definition);
     $('#id').data().id = id;
+    //show the update phrase popup form
     $('.overlay').show();
 };
 
 Phrases.update = function(event) {
+    //prevent page reload on update phrase form submission
     event.preventDefault();
-    // console.log($(this).serialize());
+    //define post url
     url = "/phrases/" + $('#id').data().id;
-    // console.log(url);
+    //AJAX POST request of updated word from update word form
     $.post(url, $(this).serialize())
+    // when POST request is completed, update Phrases and clear add phrase form
         .done(function(res) {
             Phrases.all();
             $('#update')[0].reset();
         });
+    //hide update phrase popup form
     $('.overlay').hide();
 };
 
 Phrases.delete = function(item) {
-    // console.log(item);
-    // url = "/phrases/:" + $(item).attr("data-id");
+    //define delete phrase url using data-id stored in each phrase div
     url = "/phrases/" + $(item).data().id;
-    // console.log(url);
+    //AJAX DELETE request of selected word
     $.ajax({
         url: url,
         type: 'DELETE',
+        //on success, refresh phrases list
         success: function(response) {
-            // console.log(response);
             Phrases.all();
         }
     });

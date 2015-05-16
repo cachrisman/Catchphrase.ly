@@ -3,9 +3,9 @@
 
 <head>
     <title>Catchphrase.ly</title>
-    <meta charset="utf-8" />
-    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <!-- jQuery -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
     <!-- Underscore -->
@@ -53,13 +53,15 @@
         <ul class="list-group" id="phrases-ul">
         </ul>
     </div>
-</body>
 <!-- Underscore template -->
 <script type="text/template" id="phrases-template">
     <% _.each(collection, function(item){ %>
-        <li class='list-group-item'><div class='list-group-item-div' data-id=<%= item._id %> onclick="Phrases.show_edit(this)"><%= item.word %> : <%= item.definition %></div><button data-id=<%= item._id %> onclick="Phrases.delete(this)" type="button" class="close" aria-label="Close"><span aria-hidden="true">×</span></button>
+        <li class='list-group-item'>
+        <div class='list-group-item-div' data-id=<%= item._id %> onclick="Phrases.show_edit(this)"><%= item.word %> : <%= item.definition %></div>
+        <button data-id=<%= item._id %> onclick="Phrases.delete(this)" type="button" class="close" aria-label="Close"><span aria-hidden="true">×</span></button>
         </li>
         <% }); %>
 </script>
+</body>
 
 </html>
