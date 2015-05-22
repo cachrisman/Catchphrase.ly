@@ -1,0 +1,16 @@
+var mongoose = require("mongoose");
+
+var phraseSchema = new mongoose.Schema({
+  word: {
+    type: String,
+    default: ""
+  },
+  definition: {
+    type: String,
+    default: ""
+  }
+});
+//define Phrases as a mongoose model using phrase schema
+var Phrase = mongoose.model("Phrase", phraseSchema);
+
+module.exports = Phrase;

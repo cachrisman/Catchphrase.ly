@@ -1,24 +1,7 @@
-<!DOCTYPE html>
-<html>
+<% include partials/head_phrase %>
 
-<head>
-    <title>Catchphrase.ly</title>
-    <meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <!-- jQuery -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.js"></script>
-    <!-- Underscore -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
-    <!-- Bootstrap -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-    <!-- ToEat.ly -->
-    <link rel="stylesheet" type="text/css" href="css/main.css">
-    <script src="js/app.js"></script>
-</head>
+<% include partials/header %>
 
-<body>
     <div class="overlay">
         <div id="setup" class="center">
             <span class="glyphicon glyphicon-remove btn-xs pull-right" aria-hidden="true" id='close' title="close"></span><br>
@@ -53,16 +36,5 @@
         <ul class="list-group" id="phrases-ul">
         </ul>
     </div>
-<!-- Underscore template -->
-<script type="text/template" id="phrases-template">
-    <% _.each(collection, function(item){ %>
-        <li class='list-group-item'>
-        <%= item.word %> : <%= item.definition %>
-        <button data-id=<%= item._id %> onclick="Phrases.delete(this)" type="button" class="close" aria-label="Close"><span aria-hidden="true">×</span></button>
-        <button data-id=<%= item._id %> onclick="Phrases.show_edit(this)" type="button" class="edit" aria-label="Edit"><span aria-hidden="true" class="glyphicon glyphicon-pencil"></span></button>
-        </li>
-        <% }); %>
-</script>
-</body>
 
-</html>
+<% include partials/footer %>

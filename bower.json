@@ -1,0 +1,27 @@
+{
+  "name": "CatchPhrase.ly",
+  "main": "index.js",
+  "version": "0.1.0",
+  "homepage": "https://github.com/cachrisman/Catchphrase.ly",
+  "authors": [
+    "cachrisman <charlie.chrisman@gmail.com>"
+  ],
+  "description": "CatchPrase.ly",
+  "moduleType": [
+    "node"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "bootstrap-validator": "~0.8.1",
+    "bootstrap": "~3.3.4",
+    "underscore": "~1.8.3",
+    "jquery": "~2.1.4"
+  }
+}

@@ -12,13 +12,17 @@ var phrases;
 // VIEW OBJECT
 function View() {}
 
-View.render = function(items, parentId, templateId) {
-    // render a template
-    var template = _.template($("#" + templateId).html());
-    // input data into template and append to parent
-    $("#" + parentId).html(template({
-        collection: items
-    }));
+View.render = function(items, parentId, templateFile) {
+    var template;
+    // get template file
+    $.get("/template/" + templateFile).done(function(data){
+        // render a template
+        template = _.template(data);
+        // input data into template and append to parent
+        $("#" + parentId).html(template({
+            collection: items
+        }));
+    });
 };
 
 View.init = function() {
@@ -54,11 +58,11 @@ function Phrases() {}
 
 Phrases.all = function() {
     //AJAX GET request
-    $.get("/phrases", function(res) {
+    $.get("/phrases.json", function(res) {
         // parse the response
         phrases = JSON.parse(res);
         // render the results
-        View.render(phrases, "phrases-ul", "phrases-template");
+        View.render(phrases, "phrases-ul", "phrases-template.html");
     }).done(function(res) {
         //when GET request completes, reset View and re-init View
         View.reset();
