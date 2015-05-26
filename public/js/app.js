@@ -15,7 +15,7 @@ function View() {}
 View.render = function(items, parentId, templateFile) {
     var template;
     // get template file
-    $.get("/template/" + templateFile).done(function(data){
+    $.get("/template/" + templateFile).done(function(data) {
         // render a template
         template = _.template(data);
         // input data into template and append to parent
@@ -29,7 +29,7 @@ View.init = function() {
     //event listener for add phrase form
     $('#phrases-form').on("submit", Phrases.add);
     //event listener for update phrase popup form
-    $('#update').on("submit", Phrases.update);
+    $('#update-form').on("submit", Phrases.update);
 
     //event listener for close button on update phrase popup form
     $('#close').on("click", function() {
@@ -38,6 +38,15 @@ View.init = function() {
     //event listener for ESC key to close update phrase popup form
     $(document).on("keyup", function(e) {
         if (e.keyCode == 27) {
+            $('.overlay').hide();
+        }
+    });
+    $(document).mouseup(function(e) {
+        var container = $("#setup");
+
+        if (!container.is(e.target) // if the target of the click isn't the container...
+            && container.has(e.target).length === 0) // ... nor a descendant of the container
+        {
             $('.overlay').hide();
         }
     });
@@ -53,12 +62,13 @@ View.reset = function() {
     //turns off event listener for ESC key on update phrase form
     $(document).off("keyup");
 };
+
 // Phrases OBJECT
 function Phrases() {}
 
 Phrases.all = function() {
     //AJAX GET request
-    $.get("/phrases.json", function(res) {
+    $.get("/phrases/json", function(res) {
         // parse the response
         phrases = JSON.parse(res);
         // render the results
@@ -104,7 +114,7 @@ Phrases.update = function(event) {
     url = "/phrases/" + $('#id').data().id;
     //AJAX POST request of updated word from update word form
     $.post(url, $(this).serialize())
-    // when POST request is completed, update Phrases and clear add phrase form
+        // when POST request is completed, update Phrases and clear add phrase form
         .done(function(res) {
             Phrases.all();
             $('#update')[0].reset();

@@ -18,25 +18,27 @@
     padding: 20px;
     margin-left: auto;
     margin-right: auto;
+    border-radius: 5px;
 }
 
-button.edit {
+.edit {
     float: right;
     -webkit-appearance: none;
     padding: 0;
     cursor: pointer;
     background: 0 0;
     border: 0;
-    opacity: .2;
-    padding-top: 3px;
+    opacity: .3;
+    padding-top: 2px;
     padding-right: 5px;
+    margin-right:10px;
 }
 
 .edit:hover {
-    opacity: .5;
+    opacity: .6;
 }
 
 .close {
-    font-size: 24px;
+    font-size: 26px;
     line-height: 0.7;
 }

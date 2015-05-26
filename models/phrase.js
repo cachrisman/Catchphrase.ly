@@ -1,14 +1,23 @@
 var mongoose = require("mongoose");
 
 var phraseSchema = new mongoose.Schema({
-  word: {
-    type: String,
-    default: ""
-  },
-  definition: {
-    type: String,
-    default: ""
-  }
+    word: {
+        type: String,
+        default: ""
+    },
+    weights: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Deck',
+        weight: Number
+    }],
+    definition: {
+        type: String,
+        default: ""
+    },
+    _deck_id: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Deck'
+    }]
 });
 //define Phrases as a mongoose model using phrase schema
 var Phrase = mongoose.model("Phrase", phraseSchema);

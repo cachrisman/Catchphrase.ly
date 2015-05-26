@@ -1,13 +1,21 @@
 <!-- views/partials/header.ejs -->
 
 <body>
-    <nav class="navbar navbar-inverse">
+    <nav class="navbar navbar-inverse navbar-static-top">
         <div class="container-fluid">
             <ul class="nav navbar-nav">
                 <li><a href="/">Home</a></li>
-                <li><a href="/signup">SignUp</a></li>
-                <li><a href="/login">Login</a></li>
-                <li><a href="/profile">Profile</a></li>
+                <li><a href="/phrases">Phrases</a></li>
+                <li><a href="/decks">Phrase Decks</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <% if ( user === null) { %>
+                    <li><a href="/signup">SignUp</a></li>
+                    <li><a href="/login">Login</a></li>
+                <% } else { %>
+                    <li><a href="/profile">Profile</a></li>
+                    <li><a href="/logout">Logout</a></li>
+                <% } %>
             </ul>
         </div>
     </nav>

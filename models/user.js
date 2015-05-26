@@ -21,7 +21,11 @@ var userSchema = new mongoose.Schema({
     last_name: {
         type: String,
         default: ""
-    }
+    },
+    _deck_ids: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Deck'
+    }]
 });
 
 var confirm = function(pswrd, pswrdCon) {

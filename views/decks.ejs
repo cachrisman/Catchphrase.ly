@@ -1,0 +1,35 @@
+<% include partials/head_phrase %>
+
+<% include partials/header %>
+
+    <div class="overlay">
+        <div id="setup" class="center">
+            <span class="glyphicon glyphicon-remove btn-xs pull-right" aria-hidden="true" id='close' title="close"></span><br>
+            <form id="update-phrase">
+                <div class="input-group">
+                    <span class="input-group-addon" id="deck_">Deck Name</span>
+                    <input name="deck" type="text" class="form-control" aria-describedby="deck_" id="deck">
+                </div>
+                <br>
+                <input type="hidden" id="id" data-id="">
+                <button type="submit" class="btn btn-primary btn-block">Update</button>
+            </form>
+        </div>
+    </div>
+    <div id="page-wrapper" class="well">
+        <!-- header -->
+        <header class="page-header">
+            <h1>CatchPhrase.ly</h1>
+        </header>
+        <form id="deck-form" class="form-inline">
+            <input name="deck" type="text" class="form-control" id="new-deck" placeholder="Deck">
+            <label><input type="checkbox">Private</label>
+            <button type="submit" class="btn btn-default">Add Deck</button>
+        </form>
+        <br>
+        <!-- all phrases! -->
+        <ul class="list-group" id="decks-ul">
+        </ul>
+    </div>
+
+<% include partials/footer %>

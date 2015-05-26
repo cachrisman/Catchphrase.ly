@@ -5,5 +5,5 @@ mongoose.connect(uristring);
 
 //pass Phrases to export so index.js can access
 module.exports.Phrases = require("./phrase");
-
+module.exports.Deck = require("./deck");
 module.exports.User = require("./user");
