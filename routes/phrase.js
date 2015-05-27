@@ -14,7 +14,7 @@ router.get("/", function(req, res) {
 router.get("/json", function(req, res) {
     // phrases#get
     //find all records from database, sort by word ascending
-    db.Phrases.find({}, null, {
+    db.Phrase.find({}, null, {
             sort: {
                 'word': 'asc'
             }
@@ -30,7 +30,7 @@ router.post("/", function(req, res) {
     //parse new phrase from request body
     var newPhrase = req.body;
     //create new database record
-    db.Phrases.create(newPhrase, function(err, phrase) {
+    db.Phrase.create(newPhrase, function(err, phrase) {
         //on success, send 201 (created) and the created phrase
         res.status(201).send(phrase);
     });
@@ -41,7 +41,18 @@ router.post("/:phrase_id", function(req, res) {
     //parse udpated phrase from request body
     var updatedPhrase = req.body;
     //find phrase to update by url request param _id and update with updated phrase
-    db.Phrases.findByIdAndUpdate(req.params.phrase_id, updatedPhrase, function(err, phrase) {
+    db.Phrase.findByIdAndUpdate(req.params.phrase_id, updatedPhrase, function(err, phrase) {
+        //on success send 201 (created) and the updated phrase
+        res.status(201).send(phrase);
+    });
+});
+
+router.put("/:phrase_id", function(req, res) {
+    // phrases#update
+    //parse udpated phrase from request body
+    var updatedPhrase = req.body;
+    //find phrase to update by url request param _id and update with updated phrase
+    db.Phrase.findByIdAndUpdate(req.params.phrase_id, updatedPhrase, function(err, phrase) {
         //on success send 201 (created) and the updated phrase
         res.status(201).send(phrase);
     });
@@ -50,7 +61,7 @@ router.post("/:phrase_id", function(req, res) {
 router.delete("/:phrase_id", function(req, res) {
     // phrases#delete
     //find phrase to delete by url request param _id and delete
-    db.Phrases.findByIdAndRemove(req.params.phrase_id,
+    db.Phrase.findByIdAndRemove(req.params.phrase_id,
         function(err, phrase) {
             //on success send 204 (No content)
             res.sendStatus(204);

@@ -22,7 +22,7 @@ var userSchema = new mongoose.Schema({
         type: String,
         default: ""
     },
-    _deck_ids: [{
+    _decks: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Deck'
     }]
@@ -77,7 +77,6 @@ userSchema.methods.checkPswrd = function(password, cb) {
             }
         });
 };
-
 
 var User = mongoose.model("User", userSchema);
 

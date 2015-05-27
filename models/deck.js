@@ -5,12 +5,16 @@ var deckSchema = new mongoose.Schema({
         type: String,
         default: ""
     },
-    _user_id: [{
+    isPrivate: {
+        type: Boolean,
+        default: false
+    },
+    _users: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
     }]
 });
-//define Phrases as a mongoose model using phrase schema
+//define Phrases as a mongoose model using deck schema
 var Deck = mongoose.model("Deck", deckSchema);
 
 module.exports = Deck;

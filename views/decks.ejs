@@ -5,12 +5,27 @@
     <div class="overlay">
         <div id="setup" class="center">
             <span class="glyphicon glyphicon-remove btn-xs pull-right" aria-hidden="true" id='close' title="close"></span><br>
-            <form id="update-phrase">
+            <form id="update-form">
                 <div class="input-group">
                     <span class="input-group-addon" id="deck_">Deck Name</span>
-                    <input name="deck" type="text" class="form-control" aria-describedby="deck_" id="deck">
+                    <input name="name" type="text" class="form-control" aria-describedby="deck_" id="deck-name">
                 </div>
-                <br>
+                <div class="checkbox">
+                    <label>
+                        <input name="isPrivate" type="checkbox" id="isPrivate"> Private
+                    </label>
+                </div>
+                <div class="phrase-list-outer">
+                    <div class="well well-sm phrase-list-inner">
+                        <ul id="phrases-in-deck" class="list-group">
+                        </ul>
+                    </div>
+                    <div class="spacer"></div>
+                    <div class="well well-sm phrase-list-inner">
+                        <ul id="available-phrases" class="list-group">
+                        </ul>
+                    </div>
+                </div>
                 <input type="hidden" id="id" data-id="">
                 <button type="submit" class="btn btn-primary btn-block">Update</button>
             </form>
@@ -21,9 +36,16 @@
         <header class="page-header">
             <h1>CatchPhrase.ly</h1>
         </header>
-        <form id="deck-form" class="form-inline">
-            <input name="deck" type="text" class="form-control" id="new-deck" placeholder="Deck">
-            <label><input type="checkbox">Private</label>
+        <form id="add-form" class="form-inline">
+            <div class="input-group">
+                <span class="input-group-addon" id="deck_">Deck Name</span>
+                <input name="name" type="text" class="form-control" id="new-deck" placeholder="Deck Name" aria-describedby="deck_">
+            </div>
+            <div class="checkbox">
+                <label>
+                    <input name="isPrivate" type="checkbox"> Private
+                </label>
+            </div>
             <button type="submit" class="btn btn-default">Add Deck</button>
         </form>
         <br>

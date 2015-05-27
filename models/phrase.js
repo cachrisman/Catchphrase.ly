@@ -14,7 +14,7 @@ var phraseSchema = new mongoose.Schema({
         type: String,
         default: ""
     },
-    _deck_id: [{
+    _decks: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Deck'
     }]

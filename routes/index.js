@@ -1,9 +1,9 @@
 var express = require('express'),
     router = express.Router();
 
-router.use('/', require('./users'));
-router.use('/decks', require('./decks'));
-router.use('/phrases', require('./phrases'));
+router.use('/', require('./user'));
+router.use('/decks', require('./deck'));
+router.use('/phrases', require('./phrase'));
 
 router.get("/", function(req, res) {
     // req.flash('info', "This is a flash message");

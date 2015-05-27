@@ -11,7 +11,7 @@
 }
 
 #setup {
-    width: 500px;
+    width: 600px;
     background-color: white;
     opacity: 1;
     margin-top: 100px;
@@ -31,7 +31,7 @@
     opacity: .3;
     padding-top: 2px;
     padding-right: 5px;
-    margin-right:10px;
+    margin-right: 10px;
 }
 
 .edit:hover {
@@ -41,4 +41,31 @@
 .close {
     font-size: 26px;
     line-height: 0.7;
+}
+
+.phrase-list-outer {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.phrase-list-inner {
+    width: 47.3%;
+    display: inline-block;
+    vertical-align: top;
+    /*min-height: 100px;*/
+    /*padding: 5px;*/
+    /*max-height: 300px;*/
+    height: 300px;
+    overflow-y: scroll;
+    margin-bottom: 0;
+}
+
+.spacer {
+    width: 4%;
+    display: inline-block;
+}
+
+a.list-group-item:hover,
+a.list-group-item:focus {
+    background-color: #CCCCCC;
 }

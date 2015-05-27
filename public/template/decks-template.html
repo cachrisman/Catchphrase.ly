@@ -1,6 +1,6 @@
 <% _.each(collection, function(item){ %>
     <li class='list-group-item'>
-    <%= item.word %> : <%= item.definition %>
+    <%= item.name %>
     <button data-id=<%= item._id %> onclick="Page.delete(this)" type="button" class="close" aria-label="Close"><span aria-hidden="true">×</span></button>
     <button data-id=<%= item._id %> onclick="Page.show_edit(this)" type="button" class="edit" aria-label="Edit"><span aria-hidden="true" class="glyphicon glyphicon-pencil"></span></button>
     </li>

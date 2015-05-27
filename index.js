@@ -5,18 +5,17 @@ var express = require("express"),
     bodyParser = require("body-parser"),
     flash = require('connect-flash'),
     session = require("express-session"),
+    MongoStore = require('connect-mongo')(session),
     morgan = require('morgan'),
     //require models.js that defines database schema and models
     db = require("./models");
 
 // CONFIG //
 
-//set variable 'port' (process.env.PORT is heroku's port variable)
-app.set('port', (process.env.PORT || 5000));
-
 // session config
 app.use(session({
     secret: "SUPER STUFF",
+    store: new MongoStore({mongooseConnection:db.mongoose.connection}),
     resave: false,
     saveUninitialized: true
 }));
@@ -32,44 +31,21 @@ app.use(flash());
 // set view engine to ejs
 app.set('view engine', 'ejs');
 
-// app.use(morgan('dev'));
+// this enables logging of requests to console
+app.use(morgan('dev'));
 
 // serve js & css files into a public folder
 app.use(express.static("bower_components"));
 app.use(express.static("public"));
 
-var loginHelpers = function(req, res, next) {
-
-    req.login = function(user) {
-        req.session.userId = user._id;
-        req.user = user;
-        return user;
-    };
-
-    req.logout = function() {
-        req.session.userId = null;
-        req.user = null;
-    };
-
-    req.currentUser = function(cb) {
-        var userId = req.session.userId;
-        db.User.
-        findOne({
-            _id: userId
-        }, cb);
-    };
-
-    // careful to have this
-    next(); // real important
-};
-
-app.use(loginHelpers);
+// encapsulate loginHelpers in external file
+app.use(require('./loginHelpers'));
+// app.use(db.User.loginHelpers);
 
 // ROUTES //
-var routes = require('./routes');
-app.use('/',routes);
+app.use('/', require('./routes'));
 
 // listen on port set at top
-app.listen(app.get('port'), function() {
-    console.log("Server running on port:", app.get('port'));
+app.listen((process.env.PORT || 5000), function() {
+    console.log("Server running on port:", (process.env.PORT || 5000));
 });
