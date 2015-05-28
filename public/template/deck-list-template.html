@@ -1,0 +1,4 @@
+<li class="deck-list list-group-item" role="presentation"><a role="menuitem" tabindex="-1" href="#">All Phrases</a></li>
+<% _.each(collection, function(item){ %>
+    <li data-id=<%= item._id %> class="deck-list list-group-item" role="presentation"><a role="menuitem" tabindex="-1" href="#"><%= item.name %></a></li>
+<% }); %>

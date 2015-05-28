@@ -54,12 +54,19 @@ router.get("/:deck_id", function(req, res) {
 router.put("/:deck_id", function(req, res) {
     // decks#update
     //parse udpated deck from request body
+    // debugger;
     var updatedDeck = req.body;
-    updatedPhrases = updatedDeck.phrases.split(",");
     updatedDeck._phrases = [];
-    updatedPhrases.forEach(function(v){updatedDeck._phrases.push(v);});
+    // check if phrases is not empty and split and make array of phrase ids
+    if (updatedDeck.phrases !== "") {
+        updatedPhrases = updatedDeck.phrases.split(",");
+        updatedPhrases.forEach(function(v){updatedDeck._phrases.push(v);});
+        console.log("# of phrases in input:", updatedDeck._phrases.length);
+    } else console.log("no phrases in input.");
     //find deck to update by url request param _id and update with updated deck
-    db.Deck.findByIdAndUpdate(req.params.deck_id, updatedDeck, function(err, deck) {
+    db.Deck.findByIdAndUpdate(req.params.deck_id, updatedDeck, {new: true},function(err, deck) {
+        if (err) console.log(err);
+        else if (deck._phrases) console.log("# of saved phrases", deck._phrases.length);
         //on success send 201 (created) and the updated deck
         res.status(201).send(deck);
     });
@@ -81,7 +88,8 @@ router.get("/:deck_id/phrases", function(req, res) {
         .populate('_phrases')
         .exec(function(err, deck) {
             //upon completion of find, send status 200 and phrases as stringified JSON data
-            res.status(200).send(JSON.stringify(deck._phrases));
+            if (deck) res.status(200).send(JSON.stringify(deck._phrases));
+            else res.status(404).send("not found");
         });
 });
 

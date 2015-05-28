@@ -1,21 +1,3 @@
-// extend jquery's ajax to make $.put and $.delete functions
-jQuery.each(["put", "delete"], function(i, method) {
-    jQuery[method] = function(url, data, callback, type) {
-        if (jQuery.isFunction(data)) {
-            type = type || callback;
-            callback = data;
-            data = undefined;
-        }
-        return jQuery.ajax({
-            url: url,
-            type: method,
-            dataType: type,
-            data: data,
-            success: callback
-        });
-    };
-});
-
 function compare(a,b) {
   return a.word.toLowerCase() === b.word.toLowerCase() ? 0 : a.word.toLowerCase() < b.word.toLowerCase() ? -1 : 1;
 }
@@ -23,23 +5,9 @@ function compare(a,b) {
 // on page load
 $(function() {
     // variable to store ajax data
-    var page = new Page();
+    var quiz = new Quiz();
     // get and render the phrases
-    page.all();
-
-    if (page.path === "phrases") {
-        $.get("/decks/json", function(res) {
-            // parse the response
-            page.content.decks = [];
-            page.content.decks = JSON.parse(res);
-            // render the results
-        }).done(function(res) {
-            //when GET request completes, reset View and re-init View
-            View.render(page.content.decks, "deck-list", "/template/deck-list-template.html");
-            // View.reset(that);
-            // View.init(that);
-        });
-    }
+    View.init();
 });
 
 // // // // // // //
@@ -80,39 +48,25 @@ View.render = function(items, parentId, templateFile) {
 
 View.init = function(page) {
     //event listener for add form
-    $('#add-form').on("submit", $.proxy(page.add, page));
-    //event listener for update popup form
-    $('#update-form').on("submit", $.proxy(page.update, page));
-
-    $('#'+page.path+'-ul').on("click", "button.edit", $.proxy(page.show_edit, page));
-    $('#'+page.path+'-ul').on("click", "button.close", $.proxy(page.delete, page));
-    $('#deck-list').on("click", "li.deck-list a", $.proxy(page.all, page));
+    $('#quiz-form').on("submit", $.proxy(quiz.start, page));
 };
 
 View.reset = function(page) {
-    //turns off event listener for add form
-    $('#add-form').off();
     //turns off event listener for update popup form
     $('#update-form').off();
     $('#'+page.path+'-ul').off();
 };
 
-function Page() {
+function Quiz() {
     this.content = {};
     this.path = window.location.href.split('/')[3].toLowerCase().replace('#','');
 }
 
-Page.prototype.all = function(event, deck_id) {
+function Phrases() {}
+
+Phrases.prototype.all = function() {
     //AJAX GET request
-    if (event) {
-        deck_id = event.target.parentElement.dataset.id;
-        $(event.target).parents(".input-group-btn").find('.btn').text($(event.target).text());
-        // $(event.target).parents(".input-group-btn").find('.btn').val($(event.target).text());
-        $(event.target).parents(".btn-group").find('.selection').text($(event.target).text()).end() .children( '.dropdown-toggle' ).dropdown( 'toggle' );
-    }
-    var url;
-    if (deck_id) url = "/decks/" + deck_id + "/phrases";
-    else url = "/" + this.path + "/json";
+    var url = "/phrases/json";
     var that = this;
     $.get(url, function(res) {
         // parse the response
@@ -121,6 +75,22 @@ Page.prototype.all = function(event, deck_id) {
     }).done(function(res) {
         //when GET request completes, reset View and re-init View
         View.render(that.content, that.path + "-ul", "/template/" + that.path + "-template.html");
+        View.reset(that);
+        View.init(that);
+    });
+
+};
+
+
+function Deck() {}
+
+Deck.prototype.list = function(deck_id) {
+    //AJAX GET request
+    var url = "/decks/" + deck_id;
+    var that = this;
+    $.get(url).done(function(res) {
+        //when GET request completes, reset View and re-init View
+        View.render(JSON.parse(res), "deck-list", "/template/deck-list-template.html");
         View.reset(that);
         View.init(that);
     });
@@ -236,9 +206,3 @@ Page.prototype.update = function(event) {
     $('#myModal').modal('hide');
 };
 
-Page.prototype.delete = function() {
-    //define delete phrase url using data-id stored in each phrase div
-    url = "/" + this.path + "/" + $(event.target).parent().data().id;
-    //AJAX DELETE request of selected word and on success, update page
-    $.delete(url, this.all());
-};

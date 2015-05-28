@@ -9,8 +9,8 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="myModalLabel">Edit Deck</h4>
             </div>
-            <div class="modal-body">
-                <form id="update-form">
+            <form id="update-form">
+                <div class="modal-body">
                     <div class="input-group">
                         <span class="input-group-addon" id="deck_">Deck Name</span>
                         <input name="name" type="text" class="form-control" aria-describedby="deck_" id="deck-name">
@@ -21,33 +21,33 @@
                         </label>
                     </div>
                     <div class="phrase-list-title-outer">
-                        <div class="phrase-list-title-inner"><p>Phrases in Deck</p></div>
-                        <div class="spacer"></div>
                         <div class="phrase-list-title-inner"><p>Available Phrases</p></div>
+                        <div class="spacer"></div>
+                        <div class="phrase-list-title-inner"><p>Phrases in Deck</p></div>
                     </div>
                     <div class="phrase-list-outer">
-                        <div class="phrase-list-inner">
-                            <div class="well well-sm">
-                                <ul id="phrases_in_deck" class="list-group">
-                                </ul>
-                            </div>
-                        </div>
-                        <div class="spacer"></div>
                         <div class="phrase-list-inner">
                             <div class="well well-sm">
                                 <ul id="available_phrases" class="list-group">
                                 </ul>
                             </div>
                         </div>
+                        <div class="spacer"></div>
+                        <div class="phrase-list-inner">
+                            <div class="well well-sm">
+                                <ul id="phrases_in_deck" class="list-group">
+                                </ul>
+                            </div>
+                        </div>
                     </div>
-                    <input type="hidden" id="phrases" name="phrases">
+                    <input type="text" style="display: none" id="phrases" name="phrases">
                     <input type="hidden" id="id" data-id="">
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
-            </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Save changes</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
