@@ -22,11 +22,6 @@
     "bootstrap-validator": "~0.8.1",
     "bootstrap": "~3.3.4",
     "underscore": "~1.8.3",
-    "jquery": "~2.1.4",
-    "bower": "0.6.x"
-    },
-    "scripts": {
-        "postinstall": "bower install"
-    }
+    "jquery": "~2.1.4"
   }
 }
