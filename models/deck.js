@@ -12,6 +12,10 @@ var deckSchema = new mongoose.Schema({
     _users: [{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User'
+    }],
+    _phrases: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Phrase'
     }]
 });
 //define Phrases as a mongoose model using deck schema

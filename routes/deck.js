@@ -43,10 +43,21 @@ router.post("/", function(req, res) {
     });
 });
 
+router.get("/:deck_id", function(req, res) {
+    // decks#update
+    db.Deck.findById(req.params.deck_id, function(err, deck) {
+        //on success send 200 and the found deck
+        res.status(200).send(JSON.stringify(deck));
+    });
+});
+
 router.put("/:deck_id", function(req, res) {
     // decks#update
     //parse udpated deck from request body
     var updatedDeck = req.body;
+    updatedPhrases = updatedDeck.phrases.split(",");
+    updatedDeck._phrases = [];
+    updatedPhrases.forEach(function(v){updatedDeck._phrases.push(v);});
     //find deck to update by url request param _id and update with updated deck
     db.Deck.findByIdAndUpdate(req.params.deck_id, updatedDeck, function(err, deck) {
         //on success send 201 (created) and the updated deck
@@ -66,19 +77,16 @@ router.delete("/:deck_id", function(req, res) {
 
 router.get("/:deck_id/phrases", function(req, res) {
     //parse udpated deck from request body
-        db.Phrase.find({_decks: req.params.deck_id}, null, {
-            sort: {
-                'word': 'asc'
-            }
-        },
-        function(err, phrases) {
+        db.Deck.findById({_id: req.params.deck_id})
+        .populate('_phrases')
+        .exec(function(err, deck) {
             //upon completion of find, send status 200 and phrases as stringified JSON data
-            res.status(200).send(JSON.stringify(phrases));
+            res.status(200).send(JSON.stringify(deck._phrases));
         });
 });
 
 router.get("/json", function(req, res) {
-    // phrases#get
+    // deck#get
     //find all records from database, sort by word ascending
 
 });

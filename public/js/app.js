@@ -16,12 +16,16 @@ jQuery.each(["put", "delete"], function(i, method) {
     };
 });
 
+function compare(a,b) {
+  return a.word === b.word ? 0 : a.word < b.word ? -1 : 1;
+}
+
 // on page load
 $(function() {
     // variable to store ajax data
-    var content;
+    var page = new Page();
     // get and render the phrases
-    Page.all();
+    page.all();
 });
 
 // // // // // // //
@@ -29,42 +33,68 @@ $(function() {
 // VIEW OBJECT
 function View() {}
 
+View.cache = {};
+
 View.render = function(items, parentId, templateFile) {
     var template;
     // get template file
-    $.get(templateFile).done(function(data) {
+    if (View.cache[templateFile]) {
         // render a template
-        template = _.template(data);
+        // console.log("using cached template:", templateFile, "\ndata:", View.cache[templateFile]);
+        template = _.template(View.cache[templateFile]);
         // input data into template and append to parent
         $("#" + parentId).html(template({
             collection: items
         }));
-    });
+    } else if (templateFile.charAt(0) === '/') {
+        $.get(templateFile).done(function(data) {
+            View.cache[this.url] = data;
+            // console.log("caching:", this.url, "\ndata:", data);
+            // render a template
+            template = _.template(data);
+            // input data into template and append to parent
+            $("#" + parentId).html(template({
+                collection: items
+            }));
+        });
+    }  else {
+        // console.log("caching:", this.url, "\ndata:", data);
+        template = _.template(templateFile);
+        // input data into template and append to parent
+        $("#" + parentId).html(template({
+            collection: items
+        }));
+    }
 };
 
-View.init = function() {
+View.init = function(page) {
     //event listener for add form
-    $('#add-form').on("submit", Page.add);
+    $('#add-form').on("submit", $.proxy(page.add, page));
     //event listener for update popup form
-    $('#update-form').on("submit", Page.update);
+    $('#update-form').on("submit", $.proxy(page.update, page));
 
+    // $('#decks-ul').on("click", "button.edit", {page:page}, page.show_edit);
+    // console.log('#'+page.path+'-ul');
+    $('#'+page.path+'-ul').on("click", "button.edit", $.proxy(page.show_edit, page));
+    $('#'+page.path+'-ul').on("click", "button.close", $.proxy(page.delete, page));
     //event listener for close button on update phrase popup form
-    $('#close').on("click", function() {
-        $('.overlay').hide();
-    });
+    // $('#close').on("click", function() {
+    //     $('.overlay').hide();
+    // });
     //event listener for ESC key to close update phrase popup form
-    $(document).on("keyup", function(e) {
-        if (e.keyCode == 27) {
-            $('.overlay').hide();
-        }
-    });
-    $(document).mouseup(function(e) {
-        var container = $("#setup");
-        // if the target of the click isn't the container nor a descendant of the container
-        if (!container.is(e.target) && container.has(e.target).length === 0) {
-            $('.overlay').hide();
-        }
-    });
+    // $(document).on("keyup", function(e) {
+    //     if (e.keyCode == 27) {
+    //         $('#myModal').modal();
+    //         // $('.overlay').hide();
+    //     }
+    // });
+    // $(document).mouseup(function(e) {
+    //     var container = $("#setup");
+    //     // if the target of the click isn't the container nor a descendant of the container
+    //     if (!container.is(e.target) && container.has(e.target).length === 0) {
+    //         $('.overlay').hide();
+    //     }
+    // });
 };
 
 View.reset = function() {
@@ -73,139 +103,141 @@ View.reset = function() {
     //turns off event listener for update popup form
     $('#update').off();
     //turns off event listener for close button on update form
-    $('#close').off();
+    // $('#close').off();
     //turns off event listener for ESC key on update form
-    $(document).off("keyup");
+    // $(document).off("keyup");
 };
 
 function Page() {
-    // which page did we load?
-    var page = window.location.href.split('/')[3];
-    return page.toLowerCase().replace('#','');
+    this.content = {};
+    this.path = window.location.href.split('/')[3].toLowerCase().replace('#','');
 }
 
-Page.all = function() {
+Page.prototype.all = function() {
     //AJAX GET request
-    var url = "/" + Page() + "/json";
+    var url = "/" + this.path + "/json";
+    var that = this;
     $.get(url, function(res) {
         // parse the response
-        content = JSON.parse(res);
+        that.content = JSON.parse(res);
         // render the results
-        View.render(content, Page() + "-ul", "/template/" + Page() + "-template.html");
+
     }).done(function(res) {
         //when GET request completes, reset View and re-init View
+        View.render(that.content, that.path + "-ul", "/template/" + that.path + "-template.html");
         View.reset();
-        View.init();
+        View.init(that);
     });
+
 };
 
-Page.add = function(event) {
+Page.prototype.add = function(event) {
     //prevent page reload on add phrase form submission
     event.preventDefault();
     //AJAX POST of new phrase from add phrase form
-    $.post("/" + Page(), $(this).serialize())
+    var that = this;
+    $.post("/" + this.path, $(event.target).serialize())
         // when POST request is completed, update Phrases and clear add phrase form
         .done(function(res) {
-            Page.all();
+            that.all();
             $('#add-form')[0].reset();
         });
 };
 
-Page.show_edit = function(item) {
+Page.prototype.show_edit = function(event) {
     //get id of phrase that was clicked
-    id = $(item).data().id;
+    id = $(event.target).parent().data().id;
     //find index of item in phrases array
-    var idx = content.map(function(e) {
+    var idx = this.content.map(function(e) {
         return e._id;
     }).indexOf(id);
     //fill in update phrase popup form input fields with data from phrases
-    if ($('#word')) $('#word').val(content[idx].word);
-    if ($('#definition')) $('#definition').val(content[idx].definition);
-    if ($('#deck-name')) $('#deck-name').val(content[idx].name);
-    if ($('#isPrivate')) $('#isPrivate').prop('checked', content[idx].isPrivate);
+    if ($('#word').length) $('#word').val(this.content[idx].word);
+    if ($('#definition').length) $('#definition').val(this.content[idx].definition);
+    if ($('#deck-name').length) $('#deck-name').val(this.content[idx].name);
+    if ($('#isPrivate').length) $('#isPrivate').prop('checked', this.content[idx].isPrivate);
     $('#id').data().id = id;
     // populate phrase list on deck edit form
-    if (Page() === 'decks') {
-        var phrases_in_deck, available_phrases;
-        // template_string = '<li data-id=<%= _id %> class="word-list list-group-item"><%= word %></li>';
-        // console.log(template_string);
-        // var phraseTemplate = _.template(template_string);
-
-        // $.get("/decks/" + id + "/phrases", function(res){
-        //     phrases_in_deck = JSON.parse(res);
-
-        //     _(phrases_in_deck).each(function(phrase) {
-        //         var $phrase = $(phraseTemplate(phrase));
-        //         $("#phrases-in-deck").append($phrase);
-        //     });
-        //     // input data into template and append to parent
-        // });
-
-        // $.get("/phrases/json").done(function(res){
-        //     available_phrases = JSON.parse(res);
-        //     _(available_phrases).each(function(phrase) {
-        //         var $phrase = $(phraseTemplate(phrase));
-        //         $("#available-phrases").append($phrase);
-        //     });
-        //     // input data into template and append to parent
-        // });
-
+    if (this.path === 'decks') {
+        var that = this;
         $.when($.get("/decks/" + id + "/phrases"), $.get("/phrases/json"))
         .done(function(a, b){
-            phrases_in_deck = JSON.parse(a[2].responseText);
+            that.content.phrases_in_deck = JSON.parse(a[2].responseText);
+            View.render(that.content.phrases_in_deck, "phrases_in_deck", "/template/deck-phrases-template.html");
 
-            _(phrases_in_deck).each(function(phrase) {
-                var $phrase = $(phraseTemplate(phrase));
-                $("#phrases-in-deck").append($phrase);
-            });
+            that.content.available_phrases = JSON.parse(b[2].responseText);
 
-            available_phrases = JSON.parse(b[2].responseText);
-            // _(available_phrases).each(function(phrase) {
-            //     var $phrase = $(phraseTemplate(phrase));
-            //     $("#available-phrases").append($phrase);
-            // });
+            for (var i = 0, len = that.content.phrases_in_deck.length; i < len; i++) {
+                for (var j = 0, len2 = that.content.available_phrases.length; j < len2; j++) {
+                    if (that.content.phrases_in_deck[i]._id === that.content.available_phrases[j]._id) {
+                        that.content.available_phrases.splice(j, 1);
+                        len2=that.content.available_phrases.length;
+                    }
+                }
+            }
+            View.render(that.content.available_phrases, "available_phrases", "/template/deck-phrases-template.html");
 
-            View.render(available_phrases, "available-phrases", "/template/deck-phrases-template.html");
-            // console.log(available_phrases);
-            $('#available-phrases').on("click", "li", { id: id, phrases_in_deck: phrases_in_deck, available_phrases: available_phrases} , Page.move);
-            $('#phrases-in-deck').on("click", "li", { id: id, phrases_in_deck: phrases_in_deck, available_phrases: available_phrases}, Page.move);
+            $('#available_phrases').on("click", "li", $.proxy(that.move, that));
+            $('#phrases_in_deck').on("click", "li", $.proxy(that.move, that));
         });
 
     }
     //show the update phrase popup form
-    $('.overlay').show();
+    // $('.overlay').show();
+    $('#myModal').modal();
 };
 
-Page.move = function(event) {
-    phrase_id = $(event.target).data().id;
-    phrase = event.data.available_phrases.filter(function(value){return value._id == phrase_id;})[0];
-    if ($(event.target).parent().attr('id') === 'available-phrases') {
-        event.data.phrases_in_deck.push();
+Page.prototype.move = function() {
+    var phrase, index;
+    var phrase_id = $(event.target).data().id;
+    if ($(event.target).parent().attr('id') === 'available_phrases') {
+        phrase = this.content.available_phrases.filter(function(value){return value._id == phrase_id;})[0];
+        index = this.content.available_phrases.indexOf(phrase);
+        this.content.phrases_in_deck.push(phrase);
+        this.content.available_phrases.splice(index,1);
+    } else if ($(event.target).parent().attr('id') === 'phrases_in_deck') {
+        phrase = this.content.phrases_in_deck.filter(function(value){return value._id == phrase_id;})[0];
+        index = this.content.phrases_in_deck.indexOf(phrase);
+        this.content.available_phrases.push(phrase);
+        this.content.phrases_in_deck.splice(index,1);
     }
-    if ($(event.target).parent().attr('id') === 'phrases-in-deck') {
-        console.log(event.data.phrases_in_deck);
-    }
+    this.content.phrases_in_deck.sort(compare);
+    this.content.available_phrases.sort(compare);
+    $('#phrases_in_deck').html("");
+    $('#available_phrases').html("");
+    View.render(this.content.phrases_in_deck, "phrases_in_deck", "/template/deck-phrases-template.html");
+    View.render(this.content.available_phrases, "available_phrases", "/template/deck-phrases-template.html");
 };
 
-Page.update = function(event) {
+Page.prototype.update = function(event) {
     //prevent page reload on update phrase form submission
     event.preventDefault();
     //define post url
-    url = "/" + Page() + "/" + $('#id').data().id;
+    url = "/" + this.path + "/" + $('#id').data().id;
+    this.content.phrases_in_deck.forEach(function(v,i,a){
+        if ($('#phrases').val()) {
+            $('#phrases').val($('#phrases').val() + "," + v._id);
+        } else {
+            $('#phrases').val(v._id);
+        }
+    });
+
+    var that = this;
     //AJAX PUT request of updated word from update word form
-    $.put(url, $(this).serialize())
+    $.put(url, $(event.target).serialize())
         // when PUT request is completed, update content and clear update form
         .done(function(res) {
-            Page.all();
+            that.all();
             $('#update-form')[0].reset();
         });
     //hide update popup form
-    $('.overlay').hide();
+    $('#myModal').modal();
+    // $('.overlay').hide();
 };
 
-Page.delete = function(item) {
+Page.prototype.delete = function() {
     //define delete phrase url using data-id stored in each phrase div
-    url = "/" + Page() + "/" + $(item).data().id;
+    url = "/" + this.path + "/" + $(event.target).parent().data().id;
     //AJAX DELETE request of selected word and on success, update page
-    $.delete(url, Page.all);
+    $.delete(url, this.all());
 };
