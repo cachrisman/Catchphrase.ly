@@ -14,7 +14,7 @@ var express = require("express"),
 
 // session config
 app.use(session({
-    secret: "SUPER STUFF",
+    secret: process.env.SECRET,
     store: new MongoStore({mongooseConnection:db.mongoose.connection}),
     resave: false,
     saveUninitialized: true
