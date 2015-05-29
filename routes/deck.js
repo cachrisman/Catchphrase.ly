@@ -45,7 +45,9 @@ router.post("/", function(req, res) {
 
 router.get("/:deck_id", function(req, res) {
     // decks#update
-    db.Deck.findById(req.params.deck_id, function(err, deck) {
+    db.Deck.findById(req.params.deck_id)
+    .populate('_phrases')
+    .exec(function(err, deck) {
         //on success send 200 and the found deck
         res.status(200).send(JSON.stringify(deck));
     });
@@ -75,8 +77,8 @@ router.put("/:deck_id", function(req, res) {
 router.delete("/:deck_id", function(req, res) {
     // decks#delete
     //find deck to delete by url request param _id and delete
-    db.Deck.findByIdAndRemove(req.params.deck_id,
-        function(err, deck) {
+    db.Deck.findByIdAndRemove(req.params.deck_id)
+    .exec(function(err, deck) {
             //on success send 204 (No content)
             res.sendStatus(204);
         });
@@ -91,12 +93,6 @@ router.get("/:deck_id/phrases", function(req, res) {
             if (deck) res.status(200).send(JSON.stringify(deck._phrases));
             else res.status(404).send("not found");
         });
-});
-
-router.get("/json", function(req, res) {
-    // deck#get
-    //find all records from database, sort by word ascending
-
 });
 
 module.exports = router;

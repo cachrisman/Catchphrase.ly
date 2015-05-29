@@ -2,34 +2,44 @@
 
 <% include partials/header %>
 
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Quiz!!</h4>
+<div id="modal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">Quiz - <span id="quiz-title"></span></h4>
+      </div>
+      <div class="row modal-body">
+        <div class="col-xs-offset-2 col-xs-8 panel panel-default">
+            <div id="card" class="panel-body">
+                <div class="pull-right"><span id="currentIndex"></span> of <span id="total"></span></div>
+                <div><h4>Word: </h4><p id="word"></p></div>
+                <div style="height: 100px"><h4>Definition: </h4><p id="definition"></p></div>
             </div>
-            <form id="update-form">
-            <div class="modal-body">
-                <div class="input-group">
-                    <span class="input-group-addon" id="word_">Word</span>
-                    <input name="word" type="text" class="form-control" aria-describedby="word_" id="word">
-                </div>
-                <br>
-                <div class="input-group">
-                    <span class="input-group-addon" id="definition_">Definition</span>
-                    <textarea name="definition" class="form-control" rows="5" aria-describedby="definition_" id="definition"></textarea>
-                </div>
-                <br>
-                <input type="hidden" id="id" data-id="">
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Save changes</button>
-            </div>
-            </form>
         </div>
+      </div>
+      <div class="modal-footer">
+        <div id="review-buttons" style="display: none">
+            <button type="button" class="btn btn-default" id="previous" disabled="disabled">Previous</button>
+            <button type="button" class="btn btn-default" id="next">Next</button>
+        </div>
+        <div id="self-graded" style="display: none">
+            <button type="button" class="btn btn-default" id="incorrect">Incorrect</button>
+            <button type="button" class="btn btn-default" id="correct">Correct</button>
+        </div>
+        <div id="incorrect-buttons" style="display: none">
+            <button type="button" class="btn btn-default" data-score="-3" id="-3">Nope. NO IDEA!!</button>
+            <button type="button" class="btn btn-default" data-score="-2" id="-2">Didn't know</button>
+            <button type="button" class="btn btn-default" data-score="-1" id="-1">Almost knew, but no...</button>
+        </div>
+        <div id="correct-buttons" style="display: none">
+            <button type="button" class="btn btn-default" data-score="1" id="1">Good, but not solid</button>
+            <button type="button" class="btn btn-default" data-score="2" id="2">I got this!</button>
+            <button type="button" class="btn btn-default" data-score="3" id="3">TOTALLY!!</button>
+        </div>
+      </div>
     </div>
+  </div>
 </div>
 
 <div id="page-wrapper" class="well">
@@ -38,36 +48,59 @@
         <h1>CatchPhrase.ly</h1>
     </header>
     <div class="row">
-        <div class="col-xs-8">
-        <form id="quiz-form">
-            <div class="dropdown">
-                <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true">
-                Choose Deck
-                <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1" id="deck-list">
-                </ul>
+        <div class="col-xs-offset-3 col-xs-6">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Quiz Yourself!</h3>
+                </div>
+                <div class="panel-body">
+                    <form id="quiz-form">
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <h5>Select Deck</h5>
+                                <div class="btn-group">
+                                    <button type="button" name="deck" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" style="width: 150px">Select Deck<span class="pull-right caret" style="margin-top: 8px;"></span>
+                                    </button>
+                                    <ul class="dropdown-menu" role="menu" id="deck-list">
+                                    </ul>
+                                </div>
+                                <h5>Quiz Type</h5>
+                                <div class="radio">
+                                  <label>
+                                    <input type="radio" name="type" id="review" value="review" checked>
+                                    Review
+                                  </label>
+                                </div>
+                                <div class="radio">
+                                  <label>
+                                    <input type="radio" name="type" id="self-graded" value="self-graded">
+                                    Self Graded Quiz
+                                  </label>
+                                </div>
+                                <div class="radio">
+                                  <label>
+                                    <input type="radio" name="type" id="multiple-choice" value="multiple-choice">
+                                    Multiple Choice
+                                  </label>
+                                </div>
+                            </div>
+                            <div class="col-xs-6">
+                                <p><span class=".h5">Deck Name:  </span><span id="deckname"></span></p>
+                                <input name="deck_id" id="deck_id" type="text" style="display: none;">
+                                <p><span class=".h5">Number of Cards:  </span><span id="number-of-cards"></span></p>
+                                <p>&nbsp;</p>
+                                <h5>Repeat Incorrect</h5>
+                                <select name="repeat" class="form-control form-inline">
+                                    <option>yes</option>
+                                    <option>no</option>
+                                </select>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Start Quiz!!</button>
+                        <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bs-example-modal-lg">Start Quiz!!</button> -->
+                    </form>
+                </div>
             </div>
-            Quiz Type
-            <div class="radio">
-              <label>
-                <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
-                Review
-              </label>
-            </div>
-            <div class="radio">
-              <label>
-                <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
-                Self Graded Quiz
-              </label>
-            </div>
-            <div class="radio disabled">
-              <label>
-                <input type="radio" name="optionsRadios" id="optionsRadios3" value="option3">
-                Multiple Choice
-              </label>
-            </div>
-        </form>
         </div>
     </div>
 </div>

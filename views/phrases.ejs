@@ -38,15 +38,12 @@
         <h1>CatchPhrase.ly</h1>
     </header>
     <form id="add-form" class="form-inline">
-        <div class="dropdown" style="display: inline-block; padding-right: 20px;">
-        <div class="input-group-btn" style="display: inline-block">
-            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="width: 150px">
-            Choose Deck
-            <span class="caret"></span>
+        <div class="btn-group" style="display: inline-block; padding-right: 20px;">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false" style="width: 150px">
+                Choose Deck<span class="pull-right caret" style="margin-top: 8px;"></span>
             </button>
-            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1" id="deck-list">
+            <ul class="dropdown-menu" role="menu" id="deck-list">
             </ul>
-        </div>
         </div>
         <input name="word" type="text" class="form-control" id="new-word" placeholder="Word" style="width: 10%">
         <input name="definition" type="text" class="form-control" id="new-definition" placeholder="Definition" style="width: 50%">
@@ -59,3 +56,15 @@
 </div>
 
 <% include partials/footer %>
+
+<!--
+        <div class="dropdown" style="display: inline-block; padding-right: 20px;">
+        <div class="input-group-btn" style="display: inline-block">
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-expanded="true" style="width: 150px">
+            Choose Deck
+            <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu1" id="deck-list">
+            </ul>
+        </div>
+        </div> -->

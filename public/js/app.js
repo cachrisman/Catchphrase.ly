@@ -106,9 +106,7 @@ Page.prototype.all = function(event, deck_id) {
     //AJAX GET request
     if (event) {
         deck_id = event.target.parentElement.dataset.id;
-        $(event.target).parents(".input-group-btn").find('.btn').text($(event.target).text());
-        // $(event.target).parents(".input-group-btn").find('.btn').val($(event.target).text());
-        $(event.target).parents(".btn-group").find('.selection').text($(event.target).text()).end() .children( '.dropdown-toggle' ).dropdown( 'toggle' );
+        $(event.target).parents(".btn-group").find('.btn').html($(event.target).text() + '<span class="pull-right caret" style="margin-top: 8px;"></span>');
     }
     var url;
     if (deck_id) url = "/decks/" + deck_id + "/phrases";
@@ -124,7 +122,6 @@ Page.prototype.all = function(event, deck_id) {
         View.reset(that);
         View.init(that);
     });
-
 };
 
 Page.prototype.add = function(event) {
@@ -141,7 +138,6 @@ Page.prototype.add = function(event) {
 };
 
 Page.prototype.show_edit = function(event) {
-    console.log("show_edit");
     //get id of phrase that was clicked
     id = $(event.target).parent().data().id;
     //find index of item in phrases array
@@ -216,10 +212,10 @@ Page.prototype.update = function(event) {
         this.content.phrases_in_deck.forEach(function(v,i,a){
             if ($('#phrases').val()) {
                 $('#phrases').val($('#phrases').val() + "," + v._id);
-                console.log(i,$('#phrases').val());
+                // console.log(i,$('#phrases').val());
             } else {
                 $('#phrases').val(v._id);
-                console.log(i,$('#phrases').val());
+                // console.log(i,$('#phrases').val());
             }
         });
     }
