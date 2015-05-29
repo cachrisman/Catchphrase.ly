@@ -114,7 +114,10 @@ Page.prototype.all = function(event, deck_id) {
     var that = this;
     $.get(url, function(res) {
         // parse the response
-        that.content = JSON.parse(res);
+        temp = JSON.parse(res);
+        console.log(temp);
+        that.content = temp.sort(compare);
+        console.log(that.content);
         // render the results
     }).done(function(res) {
         //when GET request completes, reset View and re-init View
