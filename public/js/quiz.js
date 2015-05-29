@@ -121,6 +121,7 @@ Quiz.prototype.run = function(event) {
     } else if (this.type === "self-graded") {
         // run the self-graded quiz
         console.log("self-graded quiz");
+        $('#word').addClass("invisible");
         this.deck.unviewed = this.deck.phrases.slice();
         this.deck.updateCard(null, true);
         $('#incorrect').on("click", $.proxy(this.deck.updateCard, this.deck));
@@ -193,6 +194,7 @@ Deck.prototype.prev = function() {
 };
 
 Deck.prototype._correct = function() {
+    $('#word').removeClass('invisible');
     console.log('correct');
     $('#self-graded').hide();
     $('#correct-buttons').show();
@@ -205,6 +207,7 @@ Deck.prototype._correct = function() {
         $('#self-graded').show();
         that.index++;
         card = that.pickCard();
+        $('#word').addClass("invisible");
         $('#word').text(card.word);
         $('#definition').text(card.definition);
         that.correct.push(card);
@@ -212,6 +215,7 @@ Deck.prototype._correct = function() {
 };
 
 Deck.prototype._incorrect = function() {
+    $('#word').removeClass('invisible');
     console.log('incorrect');
     $('#self-graded').hide();
     $('#incorrect-buttons').show();
@@ -224,6 +228,7 @@ Deck.prototype._incorrect = function() {
         $('#self-graded').show();
         that.index++;
         card = that.pickCard();
+        $('#word').addClass("invisible");
         $('#word').text(card.word);
         $('#definition').text(card.definition);
         that.incorrect.push(card);
