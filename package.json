@@ -4,7 +4,7 @@
   "description": "CatchPhrase.ly",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "postinstall": "./node_modules/bower/bin/bower install"
   },
   "repository": {
     "type": "git",
@@ -24,14 +24,12 @@
     "bower": "^1.4.1",
     "connect-flash": "^0.1.1",
     "connect-mongo": "^0.8.1",
+    "dotenv": "^1.1.0",
     "ejs": "^2.3.1",
     "express": "^4.12.3",
     "express-session": "^1.11.2",
     "mongoose": "^4.0.3",
     "morgan": "^1.5.3",
     "underscore": "^1.8.3"
-  },
-  "scripts": {
-    "postinstall": "./node_modules/bower/bin/bower install"
   }
 }
