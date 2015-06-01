@@ -6,4 +6,6 @@ npm-debug.log
 console.js
 
 words.json
-.env
+source ./.env
+nodemon
+SECRET="SUPER SECRET"
