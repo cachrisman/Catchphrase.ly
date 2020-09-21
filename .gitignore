@@ -1,12 +1,6 @@
-node_modules/
+node_modules
 bower_components
-
 npm-debug.log
-
 console.js
-
 words.json
-source ./.env
-nodemon
-SECRET="SUPER SECRET"
 .env
