@@ -12,6 +12,9 @@ var express = require("express"),
 
 // CONFIG //
 
+// load environment variables
+require('dotenv').load();
+
 // session config
 app.use(session({
     secret: process.env.SECRET,

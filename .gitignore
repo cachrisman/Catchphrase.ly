@@ -9,3 +9,4 @@ words.json
 source ./.env
 nodemon
 SECRET="SUPER SECRET"
+.env
