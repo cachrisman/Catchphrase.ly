@@ -30,6 +30,6 @@
     "express-session": "^1.17.1",
     "mongoose": "^5.10.6",
     "morgan": "^1.10.0",
-    "underscore": "^1.11.0"
+    "underscore": "^1.12.1"
   }
 }
